@@ -1,0 +1,2064 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#1769aa">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="CHECKFLEET">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<title>CHECKFLEET • Gestão de Manutenção</title>
+<script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=0Aj9Sf_zCCZ5U1ct6gb5Gns1da9UIlA9OGBDZppOn-BB32AqTxwHzSJzHditjy10cXlUuMbBYs5lpd665Pwcdom4WNL0TgahvycwPSwC72HrFaP5YoqoV_CZAGRqpExeAo62koUkyC2AIK9oKHeinbAhbbNdnPjHk3UShaqmWjg6c6xAqObm5T78_qZjy9Fx5iUOtxuO8IvV-lFM-NGncNElU0zOv98DENP4QEoRQ2prTPYDO7G5kt2dfiBgkXDPVIntRdYK12jrm66E6En7mrmlrEsAomzQ5L2RKk5xLdhBW4wEgEbhAK9E2bdByQ8PfCqx-TrtL5ZxiXiUL8mLfA" charset="UTF-8"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--primary:#1769aa;--dark:#123c63;--bg:#f4f7fb;--card:#fff;--text:#172033;--muted:#667085;--line:#e4e8ef;--ok:#198754;--bad:#dc3545;--warn:#f59e0b;--shadow:0 5px 18px #0000000d}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
+button,input,select,textarea{font:inherit}button{border:0;border-radius:9px;padding:10px 13px;font-weight:700;cursor:pointer}
+button:disabled{opacity:.55;cursor:not-allowed}.primary{background:var(--primary);color:#fff}.secondary{background:#eaf1f7;color:#164a72}.danger{background:#feecee;color:#a61b1b}.success{background:#eaf8ef;color:#147a3f}
+.login{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0e3556,#1769aa);padding:18px}
+.loginbox{width:100%;max-width:430px;background:#fff;border-radius:18px;padding:28px;box-shadow:0 20px 50px #0004}
+.brand-big{font-size:28px;font-weight:900;color:var(--dark)}.muted{color:var(--muted);font-size:12px}
+label{font-size:12px;font-weight:700;display:block;margin:11px 0 5px;color:#475467}
+input,select,textarea{width:100%;padding:10px;border:1px solid #ccd3dd;border-radius:8px;background:#fff}textarea{min-height:70px;resize:vertical}
+.auth-actions{display:grid;gap:8px;margin-top:14px}.auth-msg{min-height:20px;margin:12px 0 0;font-size:12px}
+header{background:linear-gradient(135deg,var(--dark),var(--primary));color:#fff;padding:14px 20px;position:sticky;top:0;z-index:5}
+.top,.wrap{max-width:1250px;margin:auto}.top{display:flex;justify-content:space-between;align-items:center;gap:12px}.brand{font-size:24px;font-weight:900}.sub{font-size:12px;opacity:.85}
+.wrap{padding:20px 15px}nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}nav button{background:#fff;color:#164a72;border:1px solid var(--line)}
+section{display:none}section.active{display:block}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:var(--shadow)}
+.stat b{font-size:28px;display:block}.toolbar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.formgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.formgrid.three{grid-template-columns:repeat(3,1fr)}
+table{width:100%;border-collapse:collapse}th,td{padding:9px;border-bottom:1px solid var(--line);text-align:left;font-size:13px}th{background:#f7f9fc}
+.badge{padding:4px 8px;border-radius:99px;font-size:11px;font-weight:800}.ok{background:#eaf8ef;color:#147a3f}.bad{background:#feecee;color:#a61b1b}.warn{background:#fff5dc;color:#946200}
+.check{border:1px solid var(--line);padding:12px;border-radius:10px;margin:8px 0}.check .r{display:flex;gap:14px;flex-wrap:wrap;margin-top:8px}.check input[type=radio]{width:auto}
+.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:14px}.empty{text-align:center;padding:28px;color:var(--muted)}
+.modal{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;padding:15px;z-index:20}.modal.show{display:flex}.modalbox{background:#fff;border-radius:15px;max-width:850px;width:100%;max-height:92vh;overflow:auto;padding:20px}
+.toast{position:fixed;right:15px;bottom:15px;background:#172033;color:#fff;padding:12px 15px;border-radius:10px;display:none;z-index:30;max-width:420px}
+.notice{padding:12px;border-radius:10px;background:#eef6ff;border:1px solid #cfe4fb;margin:10px 0;font-size:13px}
+.setting-grid{display:grid;grid-template-columns:220px 1fr;gap:14px}.setting-menu{display:grid;gap:7px}.setting-menu button{text-align:left;background:#f7f9fc;color:#164a72}.setting-menu button.active{background:#e4f0fa}
+.setting-pane{display:none}.setting-pane.active{display:block}
+@media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}.setting-grid{grid-template-columns:1fr}.formgrid,.formgrid.three{grid-template-columns:1fr}}
+@media(max-width:520px){.grid{grid-template-columns:1fr}.brand{font-size:19px}.top{align-items:flex-start}}
+@media print{header,nav,.no-print{display:none!important}body{background:#fff}.wrap{max-width:none}}
+
+.weekly-checklist-wrap{margin-top:16px}
+.weekly-title{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}
+.table-scroll{overflow-x:auto;border:1px solid #dbe3ec;border-radius:12px;background:#fff}
+.weekly-checklist{width:100%;min-width:1050px;border-collapse:separate;border-spacing:0}
+.weekly-checklist th,.weekly-checklist td{border-right:1px solid #dbe3ec;border-bottom:1px solid #dbe3ec;padding:9px;vertical-align:top}
+.weekly-checklist thead th{position:sticky;top:0;background:#0f172a;color:#fff;text-align:center;font-weight:800}
+.weekly-checklist thead th:first-child{text-align:left;position:sticky;left:0;z-index:3}
+.weekly-checklist .item-name{width:240px;min-width:240px;background:#f8fafc;text-align:left;position:sticky;left:0;z-index:2}
+.week-cell{min-width:125px;background:#fff}
+.week-status{width:100%;font-weight:700;padding:7px;border:1px solid #cbd5e1;border-radius:7px}
+.week-obs{width:100%;margin-top:6px;padding:6px;border:1px solid #dbe3ec;border-radius:7px;font-size:12px;box-sizing:border-box}
+.weekly-general-observation{margin-top:14px}
+.weekly-general-observation textarea{min-height:90px;width:100%;box-sizing:border-box}
+@media(max-width:800px){.weekly-title{align-items:flex-start;flex-direction:column}}
+
+.optional-hint{font-size:11px;color:var(--muted);font-weight:400;margin-left:5px}
+.allow-empty-note{background:#f0fdf4;border:1px solid #bbf7d0;padding:8px 12px;border-radius:8px;font-size:12px;color:#166534;margin-bottom:12px}
+.allow-empty-note i{font-style:italic}
+
+.maintenance-card{background:var(--card);border-radius:12px;padding:16px;margin-bottom:12px;border-left:4px solid var(--primary)}
+.maintenance-card .header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.maintenance-card .machine-name{font-size:18px;font-weight:700}
+.maintenance-card .hours-info{display:flex;gap:20px;flex-wrap:wrap;margin-top:8px}
+.maintenance-card .hours-info .item{background:#f8fafc;padding:6px 12px;border-radius:6px}
+.maintenance-card .hours-info .label{font-size:11px;color:var(--muted)}
+.maintenance-card .hours-info .value{font-size:16px;font-weight:700}
+.maintenance-card .status-badge{font-size:14px;padding:4px 12px;border-radius:99px}
+.status-critical{background:#feecee;color:#a61b1b;border:1px solid #fecaca}
+.status-warning{background:#fff5dc;color:#946200;border:1px solid #fcd34d}
+.status-ok{background:#eaf8ef;color:#147a3f;border:1px solid #bbf7d0}
+.status-overdue{background:#fef2f2;color:#dc2626;border:2px solid #dc2626;animation:pulse 1.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
+.maintenance-form{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.maintenance-form .full{grid-column:1/-1}
+.maintenance-list .empty{text-align:center;padding:40px;color:var(--muted)}
+.maintenance-history{font-size:12px;color:var(--muted);margin-top:6px}
+.alert-banner{background:#fef2f2;border:2px solid #dc2626;border-radius:10px;padding:14px;margin:10px 0;display:flex;align-items:center;gap:10px}
+.alert-banner .icon{font-size:24px}
+.alert-banner .text{font-weight:700;color:#991b1b}
+.maintenance-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.maintenance-stats .stat-item{background:#f8fafc;padding:10px;border-radius:8px;text-align:center}
+.maintenance-stats .stat-item .number{font-size:24px;font-weight:700;display:block}
+
+html,body{width:100%;max-width:100%;overflow-x:hidden}
+img,video,canvas{max-width:100%;height:auto}
+button{min-height:42px}
+.top{width:100%}
+.wrap{width:100%}
+.table-scroll{max-width:100%;-webkit-overflow-scrolling:touch}
+@media (max-width: 1100px){
+  .wrap{padding:16px 12px}
+  .card{padding:14px}
+  .grid{gap:10px}
+}
+@media (max-width: 700px){
+  header{padding:10px 12px}
+  .top{flex-direction:column;align-items:stretch;gap:7px}
+  .brand{font-size:20px}
+  .sub{font-size:11px}
+  .wrap{padding:12px 10px}
+  nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+  nav button{width:100%;padding:9px 7px;font-size:12px;min-height:42px}
+  .toolbar{align-items:stretch}
+  .toolbar h2{font-size:19px;margin:4px 0}
+  .toolbar>.actions,.toolbar>button{width:100%}
+  .toolbar>.actions button{flex:1}
+  .actions{width:100%}
+  .actions button{flex:1 1 140px}
+  .stat b{font-size:24px}
+  .stat span{font-size:12px}
+  table:not(.weekly-checklist){display:block;overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch}
+  th,td{font-size:12px;padding:8px}
+  .maintenance-card .header{gap:8px}
+  .maintenance-card .hours-info{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+  .maintenance-stats{grid-template-columns:1fr}
+  .modal{padding:8px}
+  .modalbox{max-height:95vh;padding:14px;border-radius:12px}
+  .login{padding:10px}
+  .loginbox{padding:20px 16px;border-radius:14px}
+  .brand-big{font-size:24px}
+  .setting-menu{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .setting-menu button{font-size:12px;padding:9px}
+}
+@media (max-width: 430px){
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+  .card{padding:11px;border-radius:11px}
+  .stat b{font-size:21px}
+  .stat span{font-size:10px}
+  nav{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .weekly-checklist{min-width:900px}
+  .weekly-checklist .item-name{width:190px;min-width:190px}
+  .week-cell{min-width:105px}
+  .maintenance-card{padding:12px}
+  .maintenance-card .hours-info{grid-template-columns:1fr}
+  .actions button{flex:1 1 100%;width:100%}
+}
+@media (min-width: 1200px){
+  .wrap{padding-top:22px}
+  .card{padding:18px}
+}
+</style>
+</head>
+<body>
+
+<div id="auth" class="login">
+  <div class="loginbox">
+    <div id="loginView">
+      <div class="brand-big">CHECKFLEET</div>
+      <p class="muted">Gestão de checklists e manutenção</p>
+      <div id="connectionNotice" class="notice">Inicializando...</div>
+      <label>Nome de usuário</label>
+      <input id="loginUser" type="text" autocomplete="username" placeholder="Usuário">
+      <label>Senha</label>
+      <input id="loginPass" type="password" autocomplete="current-password" placeholder="Senha">
+      <div class="auth-actions">
+        <button class="primary" onclick="loginUser()">ENTRAR</button>
+        <button class="secondary" onclick="showCreate()">CRIAR CONTA</button>
+        <button class="secondary" onclick="showRecovery()">RECUPERAR SENHA</button>
+      </div>
+      <p id="authMsg" class="auth-msg muted"></p>
+      <div class="notice" style="margin-top:14px"><b>Administrador inicial:</b> usuário <b>admin</b> • senha <b>admin123</b>. Após entrar, altere a senha em Configurações.</div>
+    </div>
+
+    <div id="createView" style="display:none">
+      <div class="brand-big">Criar conta</div>
+      <p class="muted">Somente os dados essenciais.</p>
+      <label>Nome de usuário</label>
+      <input id="createUser" maxlength="40" autocomplete="username" placeholder="Ex.: operador01">
+      <label>Senha</label>
+      <input id="createPass" type="password" autocomplete="new-password" placeholder="Mínimo 6 caracteres">
+      <label>Confirmar senha</label>
+      <input id="createPass2" type="password" autocomplete="new-password" placeholder="Repita a senha">
+      <div class="auth-actions">
+        <button class="primary" onclick="createAccount()">CRIAR CONTA</button>
+        <button class="secondary" onclick="showLogin()">VOLTAR</button>
+      </div>
+      <p id="createMsg" class="auth-msg muted"></p>
+    </div>
+
+    <div id="recoveryView" style="display:none">
+      <div class="brand-big">Recuperar senha</div>
+      <p class="muted">As contas deste sistema usam somente nome de usuário e senha. A redefinição deve ser feita pelo administrador.</p>
+      <label>Nome de usuário</label>
+      <input id="recoveryUser" maxlength="40" placeholder="Seu usuário">
+      <div class="auth-actions">
+        <button class="primary" onclick="recoveryHelp()">VER ORIENTAÇÃO</button>
+        <button class="secondary" onclick="showLogin()">VOLTAR</button>
+      </div>
+      <p id="recoveryMsg" class="auth-msg muted"></p>
+    </div>
+  </div>
+</div>
+
+<div id="app" style="display:none">
+<header>
+  <div class="top">
+    <div><div class="brand">CHECKFLEET</div><div class="sub">Controle de Checklist e Manutenção • <span id="net">Verificando...</span></div></div>
+    <div><span id="who"></span> <button class="secondary" onclick="signOut()">Sair</button></div>
+  </div>
+</header>
+<div class="wrap">
+<nav id="nav"></nav>
+
+<section id="dashboard">
+  <div class="grid">
+    <div class="card stat"><b id="nMachines">0</b><span>Máquinas</span></div>
+    <div class="card stat"><b id="nUsers">0</b><span>Usuários</span></div>
+    <div class="card stat"><b id="nPending">0</b><span>Pendentes neste aparelho</span></div>
+    <div class="card stat"><b id="nSent">0</b><span>Checklists enviados</span></div>
+  </div>
+  <div class="card" style="margin-top:14px">
+    <h3>Status do sistema</h3><p class="muted" id="syncInfo">Aguardando...</p>
+    <div class="actions"><button class="primary" onclick="syncQueue()">☁ Sincronizar agora</button><button class="secondary" onclick="refreshAll()">↻ Atualizar dados</button></div>
+  </div>
+</section>
+
+<section id="machines">
+  <div class="toolbar"><h2>Máquinas</h2><button class="primary" onclick="machineModal()">+ Cadastrar</button></div>
+  <div class="card" id="machinesList"></div>
+</section>
+
+<section id="maintenance">
+  <div class="toolbar">
+    <h2>🔧 Manutenção de Máquinas</h2>
+    <div class="actions no-print">
+      <button class="primary" onclick="maintenanceModal()">+ Definir Manutenção</button>
+    </div>
+  </div>
+  <div id="maintenanceContent"></div>
+</section>
+
+<section id="users">
+  <div class="toolbar"><h2>Usuários</h2><button class="primary" onclick="userModal()">+ Cadastrar operador</button></div>
+  <div class="card" id="usersList"></div>
+</section>
+
+<section id="check">
+  <div class="toolbar"><h2>Checklist semanal</h2><button class="secondary" onclick="resetDraft()">🗑 Excluir rascunho</button></div>
+  <div class="card" id="checkForm"></div>
+</section>
+
+<section id="received">
+  <div class="toolbar"><h2>Checklists recebidos</h2><div class="actions no-print"><button class="secondary" onclick="window.print()">🖨 Imprimir / PDF</button><button class="secondary" onclick="exportCSV()">⬇ CSV</button></div></div>
+  <div class="card" id="receivedList"></div>
+</section>
+
+<section id="settings">
+  <div class="toolbar"><h2>Configurações</h2></div>
+  <div class="setting-grid">
+    <div class="setting-menu">
+      <button id="setBtnCompany" onclick="settingsTab('company')">Empresa</button>
+      <button id="setBtnAccount" onclick="settingsTab('account')">Minha conta</button>
+      <button id="setBtnSystem" onclick="settingsTab('system')">Sistema</button>
+      <button id="setBtnData" onclick="settingsTab('data')">Dados e backup</button>
+    </div>
+    <div>
+      <div id="pane-company" class="setting-pane card">
+        <h3>Dados da empresa</h3>
+        <div class="formgrid">
+          <div><label>Nome da empresa</label><input id="cfgCompany"></div>
+          <div><label>Unidade</label><input id="cfgUnit"></div>
+          <div><label>CNPJ</label><input id="cfgCnpj"></div>
+          <div><label>Telefone</label><input id="cfgPhone"></div>
+        </div>
+        <label>Observações</label><textarea id="cfgObs"></textarea>
+        <div class="actions"><button class="primary" onclick="saveCompany()">Salvar</button></div>
+      </div>
+
+      <div id="pane-account" class="setting-pane card">
+        <h3>Minha conta</h3>
+        <div class="formgrid">
+          <div><label>Nome de usuário</label><input id="accUser" readonly></div>
+          <div><label>Perfil</label><input id="accRole" readonly></div>
+        </div>
+        <h4>Alterar senha</h4>
+        <label>Nova senha</label><input id="newPass" type="password" minlength="6">
+        <label>Confirmar nova senha</label><input id="newPass2" type="password" minlength="6">
+        <div class="actions"><button class="primary" onclick="changeMyPassword()">Alterar senha</button></div>
+      </div>
+
+      <div id="pane-system" class="setting-pane card">
+        <h3>Configurações do sistema</h3>
+        <label><input id="cfgAutoSync" type="checkbox" style="width:auto"> Sincronizar automaticamente quando voltar a internet</label>
+        <div style="margin:10px 0;padding:10px;background:#f0fdf4;border-radius:8px;border:1px solid #bbf7d0;">
+          <label style="margin:0;display:flex;align-items:center;gap:8px;color:#166534;">
+            <input id="cfgRequireAll" type="checkbox" style="width:auto"> 
+            <strong>Exigir resposta em todos os itens</strong>
+            <span style="font-weight:400;font-size:12px;">(desative para permitir envio parcial)</span>
+          </label>
+        </div>
+        <label>Quantidade máxima de itens por checklist</label><input id="cfgMaxItems" type="number" min="1" max="500">
+        <div class="actions"><button class="primary" onclick="saveSystem()">Salvar</button></div>
+      </div>
+
+      <div id="pane-data" class="setting-pane card">
+        <h3>Dados e backup</h3>
+        <p class="muted">O backup abaixo salva somente dados locais/offline deste aparelho.</p>
+        <div class="actions">
+          <button class="secondary" onclick="backupLocal()">💾 Exportar backup</button>
+          <button class="secondary" onclick="restoreLocal()">↥ Restaurar backup</button>
+          <button class="danger" onclick="clearLocal()">Limpar dados locais</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</div>
+</div>
+
+<div id="modal" class="modal"><div class="modalbox" id="modalBox"></div></div>
+<div id="toast" class="toast"></div>
+
+<script>
+// ============================================================
+// CONFIGURAÇÃO SUPABASE
+// ============================================================
+const SUPABASE_URL = "https://xxyvzbwdqgpipuibdvgc.supabase.co";
+const SUPABASE_KEY = "sb_publishable_4jrAjpo0JMZJaIb5Z52QqQ_kKDb2jiS";
+
+// Cria cliente Supabase
+let supabaseClient = null;
+try {
+  if (typeof window.supabase !== 'undefined' && window.supabase.createClient) {
+    supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    console.log("✅ Supabase client criado com sucesso");
+  } else {
+    console.warn("⚠️ Supabase não disponível - modo offline");
+  }
+} catch (e) {
+  console.warn("⚠️ Erro ao criar Supabase client:", e);
+}
+
+// ============================================================
+// ESTADO LOCAL
+// ============================================================
+const LOCAL_KEY = "checkfleet_stable_v1";
+const DEFAULT_LOCAL = {
+  queue: [],
+  drafts: [],
+  deletedChecklistIds: [],
+  deletedDraftKeys: [],
+  company: { name: "CHECKFLEET", unit: "", cnpj: "", phone: "", obs: "" },
+  system: { autoSync: true, requireAll: false, maxItems: 500 },
+  demoMachines: [
+    { id: "demo-m1", codigo: "EMP-001", nome: "Empilhadeira 01", tipo: "Empilhadeira", ativo: true },
+    { id: "demo-m2", codigo: "TR-001", nome: "Trator 01", tipo: "Trator", ativo: true }
+  ],
+  maintenanceRecords: [],
+  maintenanceLogs: [],
+  demoItems: [
+    { id: "demo-i1", descricao: "Nível de óleo do motor", ordem: 1, ativo: true },
+    { id: "demo-i2", descricao: "Nível de água do radiador", ordem: 2, ativo: true },
+    { id: "demo-i3", descricao: "Nível de óleo da transmissão", ordem: 3, ativo: true },
+    { id: "demo-i4", descricao: "Nível de óleo hidráulico", ordem: 4, ativo: true },
+    { id: "demo-i5", descricao: "Filtros", ordem: 5, ativo: true },
+    { id: "demo-i6", descricao: "Sistema hidráulico", ordem: 6, ativo: true },
+    { id: "demo-i7", descricao: "Pneus / esteiras", ordem: 7, ativo: true },
+    { id: "demo-i8", descricao: "Freios", ordem: 8, ativo: true },
+    { id: "demo-i9", descricao: "Luzes e sinalização", ordem: 9, ativo: true },
+    { id: "demo-i10", descricao: "Buzina e alarme de ré", ordem: 10, ativo: true }
+  ],
+  localUsers: [{ id: "local-admin", usuario: "admin", nome: "Administrador", perfil: "admin", ativo: true, passwordHash: "" }]
+};
+
+let LOCAL = null;
+let me = null, profile = null, machines = [], items = [], received = [], users = [];
+let maintenanceRecords = [], maintenanceLogs = [];
+let CLOUD_SYNC_READY = false;
+let CLOUD_PULLING = false;
+let lastCloudError = "";
+let syncTimeout = null;
+
+// ============================================================
+// FUNÇÕES DE CARREGAMENTO E SALVAMENTO LOCAL
+// ============================================================
+function loadLocal() {
+  try {
+    const raw = localStorage.getItem(LOCAL_KEY);
+    if (!raw) {
+      const def = JSON.parse(JSON.stringify(DEFAULT_LOCAL));
+      localStorage.setItem(LOCAL_KEY, JSON.stringify(def));
+      return def;
+    }
+    const d = JSON.parse(raw);
+    const def = JSON.parse(JSON.stringify(DEFAULT_LOCAL));
+    return {
+      ...def,
+      ...d,
+      company: { ...def.company, ...(d.company || {}) },
+      system: { ...def.system, ...(d.system || {}) }
+    };
+  } catch (e) {
+    console.error("Erro ao carregar dados locais:", e);
+    return JSON.parse(JSON.stringify(DEFAULT_LOCAL));
+  }
+}
+
+function saveLocal() {
+  try {
+    localStorage.setItem(LOCAL_KEY, JSON.stringify(LOCAL));
+    if (supabaseClient && CLOUD_SYNC_READY && !CLOUD_PULLING && navigator.onLine) {
+      clearTimeout(syncTimeout);
+      syncTimeout = setTimeout(function() {
+        pushToCloud();
+      }, 500);
+    }
+  } catch (e) {
+    console.error("Erro ao salvar dados locais:", e);
+  }
+}
+
+// ============================================================
+// SINCRONIZAÇÃO COM SUPABASE
+// ============================================================
+const CLOUD_TABLE = "checkfleet_data";
+
+async function ensureTableExists() {
+  if (!supabaseClient) {
+    console.warn("Supabase não disponível");
+    return false;
+  }
+  
+  try {
+    console.log("🔍 Verificando se a tabela existe...");
+    
+    const { data, error } = await supabaseClient
+      .from(CLOUD_TABLE)
+      .select("id")
+      .limit(1);
+    
+    if (error) {
+      if (error.code === "42P01" || (error.message && error.message.includes("does not exist"))) {
+        console.log("📦 Tabela não encontrada. Criando...");
+        toast("⚠️ A tabela 'checkfleet_data' precisa ser criada no SQL Editor do Supabase.", "warning");
+        return false;
+      } else {
+        console.error("❌ Erro ao verificar tabela:", error);
+        return false;
+      }
+    }
+    
+    console.log("✅ Tabela verificada com sucesso!");
+    return true;
+  } catch (e) {
+    console.error("❌ Erro ao verificar/criar tabela:", e);
+    return false;
+  }
+}
+
+async function pushToCloud() {
+  if (!supabaseClient || !navigator.onLine || CLOUD_PULLING) return false;
+  CLOUD_PULLING = true;
+  try {
+    var receivedNow = Array.isArray(received) ? received.slice() : JSON.parse(localStorage.getItem(LOCAL_KEY + "_received") || "[]");
+    var deletedIds = Array.from(new Set(LOCAL.deletedChecklistIds || []));
+    receivedNow = receivedNow.filter(function(c){ return c && !deletedIds.includes(c.id); });
+
+    var payload = {
+      users: LOCAL.localUsers || [],
+      machines: LOCAL.demoMachines || [],
+      items: LOCAL.demoItems || [],
+      received: receivedNow,
+      drafts: LOCAL.drafts || [],
+      deletedChecklistIds: deletedIds,
+      deletedDraftKeys: Array.from(new Set(LOCAL.deletedDraftKeys || [])),
+      maintenanceRecords: LOCAL.maintenanceRecords || [],
+      maintenanceLogs: LOCAL.maintenanceLogs || [],
+      company: LOCAL.company || {},
+      system: LOCAL.system || {},
+      updated_at: new Date().toISOString()
+    };
+
+    var result = await supabaseClient.from(CLOUD_TABLE).upsert({
+      id: "shared_data",
+      data: payload,
+      updated_at: payload.updated_at
+    }, { onConflict: "id" });
+
+    if (result.error) {
+      lastCloudError = result.error.message || String(result.error);
+      console.error("Erro ao enviar para Supabase:", result.error);
+      return false;
+    }
+    CLOUD_SYNC_READY = true;
+    return true;
+  } catch (e) {
+    lastCloudError = e.message || String(e);
+    console.error("Erro no pushToCloud:", e);
+    return false;
+  } finally {
+    CLOUD_PULLING = false;
+  }
+}
+
+function mergeById(localArr, cloudArr) {
+  var map = new Map();
+  (Array.isArray(localArr) ? localArr : []).forEach(function(x){ if(x && x.id) map.set(x.id, x); });
+  (Array.isArray(cloudArr) ? cloudArr : []).forEach(function(x){ if(x && x.id) map.set(x.id, x); });
+  return Array.from(map.values());
+}
+
+function mergeDrafts(localArr, cloudArr) {
+  var map = new Map();
+  (Array.isArray(localArr) ? localArr : []).forEach(function(x){ if(x && x.key) map.set(x.key, x); });
+  (Array.isArray(cloudArr) ? cloudArr : []).forEach(function(x){
+    if(!x || !x.key) return;
+    var old = map.get(x.key);
+    if(!old || new Date(x.savedAt || 0) >= new Date(old.savedAt || 0)) map.set(x.key, x);
+  });
+  return Array.from(map.values());
+}
+
+async function pullFromCloud() {
+  if (!supabaseClient || !navigator.onLine || CLOUD_PULLING) return false;
+  CLOUD_PULLING = true;
+  try {
+    var result = await supabaseClient.from(CLOUD_TABLE)
+      .select("data, updated_at")
+      .eq("id", "shared_data")
+      .maybeSingle();
+
+    if (result.error) {
+      lastCloudError = result.error.message || String(result.error);
+      console.error("Erro ao baixar do Supabase:", result.error);
+      return false;
+    }
+    if (!result.data || !result.data.data) return false;
+
+    var cloud = result.data.data || {};
+    var cloudDeleted = Array.from(new Set(cloud.deletedChecklistIds || []));
+    LOCAL.deletedChecklistIds = Array.from(new Set((LOCAL.deletedChecklistIds || []).concat(cloudDeleted)));
+    var cloudDeletedDrafts = Array.from(new Set(cloud.deletedDraftKeys || []));
+    LOCAL.deletedDraftKeys = Array.from(new Set((LOCAL.deletedDraftKeys || []).concat(cloudDeletedDrafts)));
+
+    LOCAL.localUsers = mergeById(LOCAL.localUsers, cloud.users);
+    LOCAL.demoMachines = mergeById(LOCAL.demoMachines, cloud.machines);
+    LOCAL.demoItems = mergeById(LOCAL.demoItems, cloud.items);
+    LOCAL.maintenanceRecords = mergeById(LOCAL.maintenanceRecords, cloud.maintenanceRecords);
+    LOCAL.maintenanceLogs = mergeById(LOCAL.maintenanceLogs, cloud.maintenanceLogs);
+    LOCAL.drafts = mergeDrafts(LOCAL.drafts, cloud.drafts).filter(function(d){ return d && !LOCAL.deletedDraftKeys.includes(d.key); });
+
+    var localReceived = JSON.parse(localStorage.getItem(LOCAL_KEY + "_received") || "[]");
+    var mergedReceived = mergeById(localReceived, cloud.received).filter(function(c){
+      return c && !LOCAL.deletedChecklistIds.includes(c.id);
+    });
+    localStorage.setItem(LOCAL_KEY + "_received", JSON.stringify(mergedReceived));
+    received = mergedReceived;
+
+    if (cloud.company) LOCAL.company = Object.assign({}, LOCAL.company, cloud.company);
+    if (cloud.system) LOCAL.system = Object.assign({}, LOCAL.system, cloud.system);
+
+    saveLocal();
+    CLOUD_SYNC_READY = true;
+    return true;
+  } catch (e) {
+    lastCloudError = e.message || String(e);
+    console.error("Erro no pullFromCloud:", e);
+    return false;
+  } finally {
+    CLOUD_PULLING = false;
+  }
+}
+
+async function syncFull() {
+  if (!supabaseClient) {
+    toast("⚠️ Supabase não configurado.", "warning");
+    return { ok: false, error: "Supabase não configurado" };
+  }
+  
+  if (!navigator.onLine) {
+    toast("📡 Você está offline.", "warning");
+    return { ok: false, error: "Offline" };
+  }
+  
+  try {
+    const tableExists = await ensureTableExists();
+    if (!tableExists) {
+      const msg = "Tabela não encontrada. Crie-a no SQL Editor do Supabase.";
+      toast("⚠️ " + msg, "error");
+      return { ok: false, error: msg };
+    }
+    
+    const pulled = await pullFromCloud();
+    const pushed = await pushToCloud();
+    
+    const success = pulled || pushed;
+    if (success) {
+      CLOUD_SYNC_READY = true;
+      await refreshAll();
+      toast("✅ Sincronização concluída!", "success");
+    }
+    
+    return { ok: success, pulled: pulled, pushed: pushed, error: lastCloudError };
+  } catch (e) {
+    console.error("❌ Erro na sincronização:", e);
+    return { ok: false, error: e.message };
+  }
+}
+
+// ============================================================
+// FUNÇÕES AUXILIARES
+// ============================================================
+function toast(t, type) {
+  type = type || "info";
+  var el = document.getElementById("toast");
+  if (!el) return;
+  
+  el.textContent = t;
+  el.style.display = "block";
+  el.className = "toast";
+  
+  var colors = {
+    success: "#198754",
+    error: "#dc3545", 
+    warning: "#f59e0b",
+    info: "#172033"
+  };
+  el.style.background = colors[type] || colors.info;
+  
+  clearTimeout(window.__toast);
+  window.__toast = setTimeout(function() {
+    el.style.display = "none";
+  }, 5000);
+}
+
+function authMsg(id, t) {
+  var el = document.getElementById(id);
+  if (el) el.textContent = t || "";
+}
+
+function validUser(u) {
+  return /^[a-zA-Z0-9._-]{3,40}$/.test(u);
+}
+
+function esc(v) {
+  return String(v || "").replace(/[&<>"']/g, function(m) {
+    return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m];
+  });
+}
+
+function fmt(x) {
+  return x ? new Date(x).toLocaleString("pt-BR") : "-";
+}
+
+function openModal() { 
+  var modal = document.getElementById("modal");
+  if (modal) modal.classList.add("show");
+}
+function closeModal() { 
+  var modal = document.getElementById("modal");
+  if (modal) modal.classList.remove("show");
+}
+
+async function sha256(text) {
+  var b = new TextEncoder().encode(text);
+  var h = await crypto.subtle.digest("SHA-256", b);
+  return Array.from(new Uint8Array(h)).map(function(x) {
+    return x.toString(16).padStart(2, "0");
+  }).join("");
+}
+
+function monday() {
+  var d = new Date();
+  var day = d.getDay();
+  var diff = day === 0 ? -6 : 1 - day;
+  d.setDate(d.getDate() + diff);
+  return d.toISOString().slice(0, 10);
+}
+
+function sunday() {
+  var d = new Date(monday() + "T00:00:00");
+  d.setDate(d.getDate() + 6);
+  return d.toISOString().slice(0, 10);
+}
+
+// ============================================================
+// AUTENTICAÇÃO
+// ============================================================
+function showLogin() {
+  document.getElementById("loginView").style.display = "block";
+  document.getElementById("createView").style.display = "none";
+  document.getElementById("recoveryView").style.display = "none";
+  authMsg("authMsg", "");
+}
+
+function showCreate() {
+  document.getElementById("loginView").style.display = "none";
+  document.getElementById("createView").style.display = "block";
+  document.getElementById("recoveryView").style.display = "none";
+  authMsg("createMsg", "");
+}
+
+function showRecovery() {
+  document.getElementById("loginView").style.display = "none";
+  document.getElementById("createView").style.display = "none";
+  document.getElementById("recoveryView").style.display = "block";
+  authMsg("recoveryMsg", "");
+}
+
+function connectionText() {
+  var el = document.getElementById("connectionNotice");
+  if (!el) return;
+  
+  if (supabaseClient) {
+    el.textContent = "☁ Supabase conectado. Dados compartilhados entre dispositivos.";
+    el.style.background = "#eef6ff";
+  } else {
+    el.textContent = "Modo local disponível para teste. Configure o Supabase para uso em rede.";
+    el.style.background = "#fff5dc";
+  }
+}
+
+async function createAccount() {
+  var u = document.getElementById("createUser").value.trim().toLowerCase();
+  var p = document.getElementById("createPass").value;
+  var p2 = document.getElementById("createPass2").value;
+  
+  if (!validUser(u)) {
+    return authMsg("createMsg", "Usuário: 3–40 caracteres, somente letras, números, ponto, hífen ou sublinhado.");
+  }
+  if (p.length < 6) {
+    return authMsg("createMsg", "A senha precisa ter pelo menos 6 caracteres.");
+  }
+  if (p !== p2) {
+    return authMsg("createMsg", "As senhas não conferem.");
+  }
+  
+  authMsg("createMsg", "Sincronizando e criando conta...");
+  
+  if (supabaseClient && navigator.onLine) {
+    await pullFromCloud();
+  }
+  
+  if (LOCAL.localUsers.some(function(x) { return x.usuario === u; })) {
+    return authMsg("createMsg", "Este usuário já existe.");
+  }
+  
+  LOCAL.localUsers.push({
+    id: "local-" + crypto.randomUUID(),
+    usuario: u,
+    nome: u,
+    perfil: "operador",
+    ativo: true,
+    passwordHash: await sha256(p)
+  });
+  saveLocal();
+  
+  if (supabaseClient && navigator.onLine) {
+    var pushed = await pushToCloud();
+    if (!pushed) {
+      authMsg("createMsg", "A conta foi salva neste aparelho, mas não foi possível sincronizar com o servidor.");
+      return;
+    }
+  }
+  
+  authMsg("createMsg", "✅ Conta criada e compartilhada com os demais dispositivos.");
+  setTimeout(showLogin, 900);
+}
+
+async function loginUser() {
+  var u = document.getElementById("loginUser").value.trim().toLowerCase();
+  var p = document.getElementById("loginPass").value;
+  
+  if (!validUser(u)) return authMsg("authMsg", "Informe um nome de usuário válido.");
+  if (!p) return authMsg("authMsg", "Informe a senha.");
+  
+  authMsg("authMsg", "Consultando servidor...");
+  
+  if (supabaseClient && navigator.onLine) {
+    await pullFromCloud();
+  }
+  
+  var localUser = LOCAL.localUsers.find(function(x) { return x.usuario === u; });
+  
+  if (localUser) {
+    if (!localUser.ativo) {
+      return authMsg("authMsg", "Usuário desativado.");
+    }
+    
+    var hash = await sha256(p);
+    
+    if (!localUser.passwordHash) {
+      if (u === "admin" && p === "admin123") {
+        localUser.passwordHash = hash;
+        saveLocal();
+        if (supabaseClient && navigator.onLine) await pushToCloud();
+      } else {
+        return authMsg("authMsg", "Senha inválida. Para o administrador inicial, use a senha: admin123.");
+      }
+    }
+    
+    if (localUser.passwordHash !== hash) {
+      return authMsg("authMsg", "Usuário ou senha inválidos.");
+    }
+    
+    me = { id: localUser.id };
+    profile = localUser;
+    await openApp();
+    return;
+  }
+  
+  authMsg("authMsg", "Usuário ou senha inválidos.");
+}
+
+function recoveryHelp() {
+  var u = document.getElementById("recoveryUser").value.trim().toLowerCase();
+  if (!validUser(u)) return authMsg("recoveryMsg", "Informe um nome de usuário válido.");
+  authMsg("recoveryMsg", "A redefinição deve ser feita pelo administrador.");
+}
+
+async function signOut() {
+  me = null;
+  profile = null;
+  document.getElementById("app").style.display = "none";
+  document.getElementById("auth").style.display = "flex";
+  document.getElementById("loginPass").value = "";
+  showLogin();
+}
+
+// ============================================================
+// APLICAÇÃO PRINCIPAL
+// ============================================================
+async function openApp() {
+  if (!profile) { return; }
+  if (profile.ativo === false) { await signOut(); return; }
+  
+  document.getElementById("auth").style.display = "none";
+  document.getElementById("app").style.display = "block";
+  document.getElementById("who").textContent = (profile.nome || profile.usuario) + " • " + profile.perfil;
+  
+  buildNav();
+  await refreshAll();
+  updateNet();
+  settingsTab("company");
+  
+  if (supabaseClient && navigator.onLine) {
+    setTimeout(function() {
+      syncFull();
+    }, 1000);
+  }
+}
+
+function buildNav() {
+  var admin = profile.perfil === "admin";
+  var manager = admin || profile.perfil === "supervisor";
+  
+  var html = '<button onclick="tab(\'dashboard\')">Dashboard</button>';
+  if (manager) html += '<button onclick="tab(\'machines\')">Máquinas</button>';
+  html += '<button onclick="tab(\'maintenance\')">🔧 Manutenção</button>';
+  html += '<button onclick="tab(\'check\')">Meu Checklist</button>';
+  if (manager) html += '<button onclick="tab(\'received\')">Recebidos</button>';
+  if (admin) html += '<button onclick="tab(\'users\')">Usuários</button><button onclick="tab(\'settings\')">Configurações</button>';
+  document.getElementById("nav").innerHTML = html;
+  
+  var firstBtn = document.querySelector("#nav button");
+  if (firstBtn) firstBtn.classList.add("active");
+  var dashboard = document.getElementById("dashboard");
+  if (dashboard) dashboard.classList.add("active");
+}
+
+function tab(id) {
+  document.querySelectorAll("section").forEach(function(x) { x.classList.remove("active"); });
+  document.querySelectorAll("#nav button").forEach(function(x) { x.classList.remove("active"); });
+  
+  var s = document.getElementById(id);
+  if (!s) return;
+  s.classList.add("active");
+  
+  var btns = document.querySelectorAll("#nav button");
+  var map = { dashboard: 0, machines: 1, maintenance: 2, check: 3, received: 4, users: 5, settings: 6 };
+  if (map[id] !== undefined && btns[map[id]]) {
+    btns[map[id]].classList.add("active");
+  }
+  
+  if (id === "check") renderCheck();
+  if (id === "maintenance") renderMaintenance();
+}
+
+async function refreshAll() {
+  if (supabaseClient && navigator.onLine) {
+    await pullFromCloud();
+  }
+  
+  machines = LOCAL.demoMachines.filter(function(x) { return x.ativo; });
+  
+  var defaultItems = [
+    { id: "demo-i1", descricao: "Nível de óleo do motor", ordem: 1, ativo: true },
+    { id: "demo-i2", descricao: "Nível de água do radiador", ordem: 2, ativo: true },
+    { id: "demo-i3", descricao: "Nível de óleo da transmissão", ordem: 3, ativo: true },
+    { id: "demo-i4", descricao: "Nível de óleo hidráulico", ordem: 4, ativo: true },
+    { id: "demo-i5", descricao: "Filtros", ordem: 5, ativo: true },
+    { id: "demo-i6", descricao: "Sistema hidráulico", ordem: 6, ativo: true },
+    { id: "demo-i7", descricao: "Pneus / esteiras", ordem: 7, ativo: true },
+    { id: "demo-i8", descricao: "Freios", ordem: 8, ativo: true },
+    { id: "demo-i9", descricao: "Luzes e sinalização", ordem: 9, ativo: true },
+    { id: "demo-i10", descricao: "Buzina e alarme de ré", ordem: 10, ativo: true }
+  ];
+  
+  defaultItems.forEach(function(ni) {
+    if (!LOCAL.demoItems.some(function(x) { return x.id === ni.id; })) {
+      LOCAL.demoItems.push(ni);
+    }
+  });
+  
+  LOCAL.demoItems.sort(function(a, b) { return a.ordem - b.ordem; });
+  saveLocal();
+  
+  items = LOCAL.demoItems.filter(function(x) { return x.ativo; });
+  users = LOCAL.localUsers;
+  received = JSON.parse(localStorage.getItem(LOCAL_KEY + "_received") || "[]");
+  maintenanceRecords = LOCAL.maintenanceRecords || [];
+  maintenanceLogs = LOCAL.maintenanceLogs || [];
+  
+  render();
+}
+
+function render() {
+  renderMachines();
+  renderUsers();
+  renderReceived();
+  renderCheck();
+  renderMaintenance();
+  
+  var set = function(id, v) {
+    var el = document.getElementById(id);
+    if (el) el.textContent = v;
+  };
+  set("nMachines", machines.length);
+  set("nUsers", users.length);
+  set("nPending", (LOCAL.drafts || []).length);
+  set("nSent", received.length);
+}
+
+// ============================================================
+// RENDERIZAÇÃO DAS TELAS
+// ============================================================
+function renderMachines() {
+  var el = document.getElementById("machinesList");
+  if (!el) return;
+  if (!machines.length) {
+    el.innerHTML = "<div class='empty'>Nenhuma máquina cadastrada.</div>";
+    return;
+  }
+  var isAdmin = profile && profile.perfil === "admin";
+  var html = '<div class="table-scroll"><table><tr><th>Código</th><th>Nome</th><th>Tipo</th><th>Ação</th></tr>';
+  machines.forEach(function(m) {
+    html += '<tr><td><b>' + esc(m.codigo) + '</b></td><td>' + esc(m.nome) + '</td><td>' + esc(m.tipo) + '</td><td>';
+    if (isAdmin) {
+      html += '<button class="danger" onclick="deleteMachine(\'' + m.id + '\')" style="padding:4px 12px;font-size:12px;">🗑 Excluir</button>';
+    } else {
+      html += '<span class="muted">—</span>';
+    }
+    html += '</td></tr>';
+  });
+  html += '</table></div>';
+  el.innerHTML = html;
+}
+
+function renderUsers() {
+  var el = document.getElementById("usersList");
+  if (!el || !profile || profile.perfil !== "admin") return;
+  if (!users.length) {
+    el.innerHTML = "<div class='empty'>Nenhum usuário.</div>";
+    return;
+  }
+  var html = '<div class="table-scroll"><table><tr><th>Usuário</th><th>Nome</th><th>Perfil</th><th>Status</th><th>Ação</th></tr>';
+  users.forEach(function(u) {
+    html += '<tr><td>' + esc(u.usuario || "-") + '</td><td>' + esc(u.nome || "-") + '</td><td><span class="badge">' + esc(u.perfil) + '</span></td><td>' + (u.ativo ? "Ativo" : "Inativo") + '</td><td>';
+    if (u.id !== profile.id) {
+      html += '<button class="secondary" onclick="toggleUser(\'' + u.id + '\', ' + (!u.ativo) + ')" style="padding:4px 12px;font-size:12px;">' + (u.ativo ? "Desativar" : "Ativar") + '</button>';
+      html += '<button class="danger" onclick="deleteUser(\'' + u.id + '\')" style="padding:4px 12px;font-size:12px;">🗑 Excluir</button>';
+    } else {
+      html += '—';
+    }
+    html += '</td></tr>';
+  });
+  html += '</table></div>';
+  el.innerHTML = html;
+}
+
+// ============================================================
+// FUNÇÃO RENDER RECEIVED
+// ============================================================
+function renderReceived() {
+  var el = document.getElementById("receivedList");
+  if (!el) return;
+  
+  received = JSON.parse(localStorage.getItem(LOCAL_KEY + "_received") || "[]");
+  
+  var filtered = received;
+  if (profile && profile.perfil === "operador") {
+    filtered = received.filter(function(c) { return c.operador_id === profile.id; });
+  }
+  
+  if (!filtered.length) {
+    el.innerHTML = "<div class='empty'>Nenhum checklist recebido ainda.</div>";
+    return;
+  }
+  
+  var isAdmin = profile && profile.perfil === "admin";
+  var html = '<div class="table-scroll"><table><tr><th>Data</th><th>Semana</th><th>Operador</th><th>Máquina</th><th>Status</th><th>Itens</th><th>Ação</th></tr>';
+  
+  filtered.slice(0, 50).forEach(function(c) {
+    var answeredCount = 0;
+    var totalItems = items.length;
+    var answers = c.answers || {};
+    
+    items.forEach(function(it) {
+      var status = "";
+      if (answers[it.id]) {
+        status = answers[it.id].status || "";
+      } else {
+        var days = getWeekDays();
+        for (var i = 0; i < days.length; i++) {
+          var day = days[i].iso;
+          if (answers[day] && answers[day][it.id]) {
+            status = answers[day][it.id].status || "";
+            break;
+          }
+        }
+      }
+      if (status && status !== "" && status !== "NA") {
+        answeredCount++;
+      }
+    });
+    
+    var progressText = answeredCount + '/' + totalItems + ' respondidos';
+    var progressPercent = totalItems > 0 ? Math.round((answeredCount / totalItems) * 100) : 0;
+    
+    html += '<tr>' +
+      '<td>' + fmt(c.enviado_em) + '</td>' +
+      '<td>' + esc(c.semana_inicio) + ' a ' + esc(c.semana_fim) + '</td>' +
+      '<td>' + esc(c.operador_nome || "-") + '</td>' +
+      '<td>' + esc(c.maquina_codigo || "") + ' — ' + esc(c.maquina_nome || "") + '</td>' +
+      '<td><span class="badge ok">' + esc(c.status) + '</span></td>' +
+      '<td><span title="' + progressText + '">' + progressPercent + '%</span></td>' +
+      '<td>' +
+        '<button class="secondary" onclick="openReceived(\'' + c.id + '\')" style="padding:4px 12px;font-size:12px;">📋 Ver</button>' +
+        (isAdmin ? '<button class="danger" onclick="deleteReceived(\'' + c.id + '\')" style="padding:4px 12px;font-size:12px;">🗑 Excluir</button>' : '') +
+      '</td>' +
+    '</tr>';
+  });
+  
+  html += '</table></div>';
+  html += '<div class="muted" style="margin-top:10px;">Total de checklists: ' + filtered.length + '</div>';
+  
+  el.innerHTML = html;
+}
+
+// ============================================================
+// MAINTENANCE FUNCTIONS
+// ============================================================
+function getLastMaintenanceLog(machineId) {
+  var logs = maintenanceLogs.filter(function(l) { return l.machineId === machineId; });
+  if (!logs.length) return null;
+  return logs.sort(function(a, b) { return new Date(b.date) - new Date(a.date); })[0];
+}
+
+function getMaintenanceStatus(machineId) {
+  var record = maintenanceRecords.find(function(r) { return r.machineId === machineId; });
+  if (!record) return { label: 'Não configurado', class: 'status-warning', color: '#f59e0b' };
+  
+  var lastLog = getLastMaintenanceLog(machineId);
+  var currentHours = lastLog ? lastLog.currentHours : 0;
+  var hoursSince = currentHours - record.lastMaintenanceHours;
+  var percentUsed = hoursSince / record.maintenanceHours;
+  
+  if (hoursSince >= record.maintenanceHours) {
+    return { label: '🔴 ATRASADO', class: 'status-overdue', color: '#dc2626' };
+  } else if (percentUsed >= 0.9) {
+    return { label: '🟡 PRÓXIMO', class: 'status-warning', color: '#f59e0b' };
+  } else {
+    return { label: '🟢 OK', class: 'status-ok', color: '#198754' };
+  }
+}
+
+function renderMaintenance() {
+  var el = document.getElementById("maintenanceContent");
+  if (!el) return;
+  if (!machines.length) {
+    el.innerHTML = "<div class='empty'>Nenhuma máquina disponível para manutenção.</div>";
+    return;
+  }
+  
+  var isAdmin = profile && profile.perfil === "admin";
+  var totalMachines = machines.length;
+  var machinesWithMaintenance = maintenanceRecords.filter(function(r) {
+    return machines.some(function(m) { return m.id === r.machineId && m.ativo; });
+  }).length;
+  var overdueCount = maintenanceRecords.filter(function(r) {
+    var machine = machines.find(function(m) { return m.id === r.machineId; });
+    if (!machine || !machine.ativo) return false;
+    var lastLog = getLastMaintenanceLog(r.machineId);
+    var currentHours = lastLog ? lastLog.currentHours : 0;
+    var hoursSince = currentHours - r.lastMaintenanceHours;
+    return hoursSince >= r.maintenanceHours;
+  }).length;
+  
+  var html = '<div class="maintenance-stats" style="margin-bottom:16px;"><div class="stat-item"><span class="number">' + totalMachines + '</span>Máquinas</div><div class="stat-item"><span class="number">' + machinesWithMaintenance + '</span>Com manutenção</div><div class="stat-item"><span class="number" style="color:' + (overdueCount > 0 ? '#dc2626' : '#147a3f') + '">' + overdueCount + '</span>' + (overdueCount > 0 ? '⚠ Precisam atenção' : '✅ Em dia') + '</div></div>';
+  
+  var criticalMachines = maintenanceRecords.filter(function(r) {
+    var machine = machines.find(function(m) { return m.id === r.machineId; });
+    if (!machine || !machine.ativo) return false;
+    var lastLog = getLastMaintenanceLog(r.machineId);
+    var currentHours = lastLog ? lastLog.currentHours : 0;
+    var hoursSince = currentHours - r.lastMaintenanceHours;
+    return hoursSince >= r.maintenanceHours;
+  });
+  
+  if (criticalMachines.length > 0) {
+    html += '<div class="alert-banner"><span class="icon">🚨</span><span class="text">ATENÇÃO: ' + criticalMachines.length + ' máquina(s) com manutenção ATRASADA!</span></div>';
+  }
+  
+  html += '<div class="maintenance-list">';
+  
+  machines.forEach(function(machine) {
+    var record = maintenanceRecords.find(function(r) { return r.machineId === machine.id; });
+    var lastLog = getLastMaintenanceLog(machine.id);
+    var currentHours = lastLog ? lastLog.currentHours : 0;
+    var status = getMaintenanceStatus(machine.id);
+    
+    html += '<div class="maintenance-card" style="border-left-color: ' + status.color + '"><div class="header"><div><span class="machine-name">' + esc(machine.codigo) + ' — ' + esc(machine.nome) + '</span><span class="status-badge ' + status.class + '" style="margin-left:10px;">' + status.label + '</span></div><div>';
+    html += '<button class="secondary" onclick="logHoursModal(\'' + machine.id + '\')" style="padding:6px 12px;font-size:12px;">📝 Registrar Horas</button>';
+    if (isAdmin) {
+      html += '<button class="secondary" onclick="editMaintenanceModal(\'' + machine.id + '\')" style="padding:6px 12px;font-size:12px;">⚙️ Configurar</button>';
+    }
+    html += '</div></div><div class="hours-info"><div class="item"><div class="label">Horas Atuais</div><div class="value">' + currentHours + 'h</div></div>';
+    if (record) {
+      html += '<div class="item"><div class="label">Última Manutenção</div><div class="value">' + record.lastMaintenanceHours + 'h</div></div><div class="item"><div class="label">Intervalo</div><div class="value">' + record.maintenanceHours + 'h</div></div><div class="item"><div class="label">Horas desde manutenção</div><div class="value" style="color:' + status.color + '">' + Math.max(0, currentHours - record.lastMaintenanceHours) + 'h</div></div>';
+    } else {
+      html += '<div class="item" style="color:var(--muted);"><div class="label">Status</div><div class="value" style="font-size:14px;">⚠ Nenhuma configuração de manutenção</div></div>';
+    }
+    html += '</div>';
+    if (lastLog) {
+      html += '<div class="maintenance-history">Último registro: ' + fmt(lastLog.date) + ' por ' + esc(lastLog.operatorName || 'Operador') + '</div>';
+    }
+    html += '</div>';
+  });
+  
+  html += '</div>';
+  
+  var logs = maintenanceLogs.filter(function(l) {
+    return machines.some(function(m) { return m.id === l.machineId && m.ativo; });
+  }).slice(0, 10);
+  if (logs.length > 0) {
+    html += '<div class="card" style="margin-top:16px;"><h4>📋 Últimos registros de horas</h4><div class="table-scroll"><table><tr><th>Máquina</th><th>Horas</th><th>Operador</th><th>Data</th><th>Observação</th></tr>';
+    logs.forEach(function(l) {
+      var machine = machines.find(function(m) { return m.id === l.machineId; });
+      html += '<tr><td>' + esc(machine ? machine.nome : l.machineId) + '</td><td><b>' + l.currentHours + 'h</b></td><td>' + esc(l.operatorName || '-') + '</td><td>' + fmt(l.date) + '</td><td>' + esc(l.notes || '') + '</td></tr>';
+    });
+    html += '</table></div></div>';
+  }
+  
+  el.innerHTML = html;
+}
+
+// ============================================================
+// FUNÇÕES DE MODAL DE MANUTENÇÃO
+// ============================================================
+function maintenanceModal() {
+  if (!profile || profile.perfil !== "admin") {
+    toast("Apenas administradores podem configurar manutenção.", "warning");
+    return;
+  }
+  if (!machines.length) {
+    toast("Cadastre uma máquina primeiro.", "warning");
+    return;
+  }
+  
+  document.getElementById("modalBox").innerHTML = '<h2>🔧 Configurar Manutenção</h2><p class="muted">Defina o intervalo de horas para manutenção da máquina.</p><div class="maintenance-form"><div class="full"><label>Máquina</label><select id="maintenanceMachine">' + machines.map(function(m) { return '<option value="' + m.id + '">' + esc(m.codigo) + ' — ' + esc(m.nome) + '</option>'; }).join('') + '</select></div><div><label>Horas da última manutenção</label><input id="lastMaintenanceHours" type="number" step="0.5" min="0" placeholder="Ex: 500" value="0"></div><div><label>Intervalo para próxima manutenção (horas)</label><input id="maintenanceInterval" type="number" step="0.5" min="1" placeholder="Ex: 1000" value="1000"></div><div class="full"><label>Observações</label><textarea id="maintenanceNotes" placeholder="Informações adicionais..."></textarea></div></div><div class="actions"><button class="primary" onclick="saveMaintenance()">💾 Salvar Configuração</button><button class="secondary" onclick="closeModal()">Cancelar</button></div>';
+  openModal();
+}
+
+async function saveMaintenance() {
+  var machineId = document.getElementById("maintenanceMachine").value;
+  var lastHours = parseFloat(document.getElementById("lastMaintenanceHours").value);
+  var interval = parseFloat(document.getElementById("maintenanceInterval").value);
+  var notes = document.getElementById("maintenanceNotes").value.trim();
+  
+  if (!machineId) return toast("Selecione uma máquina.", "warning");
+  if (isNaN(lastHours) || lastHours < 0) return toast("Informe as horas da última manutenção.", "warning");
+  if (isNaN(interval) || interval < 1) return toast("Informe um intervalo válido.", "warning");
+  
+  LOCAL.maintenanceRecords = LOCAL.maintenanceRecords.filter(function(r) { return r.machineId !== machineId; });
+  
+  LOCAL.maintenanceRecords.push({
+    id: "maint-" + Date.now(),
+    machineId: machineId,
+    lastMaintenanceHours: lastHours,
+    maintenanceHours: interval,
+    notes: notes,
+    updatedAt: new Date().toISOString()
+  });
+  
+  saveLocal();
+  if (supabaseClient && navigator.onLine) {
+    var pushed = await pushToCloud();
+    if (!pushed) {
+      toast("Configuração salva localmente, mas não foi enviada ao servidor.", "warning");
+    } else {
+      toast("✅ Configuração salva e compartilhada!", "success");
+    }
+  } else {
+    toast("✅ Configuração salva localmente!", "success");
+  }
+  closeModal();
+  refreshAll();
+}
+
+function editMaintenanceModal(machineId) {
+  var record = maintenanceRecords.find(function(r) { return r.machineId === machineId; });
+  if (!record) {
+    toast("Nenhuma configuração encontrada para esta máquina.", "warning");
+    return;
+  }
+  
+  var machine = machines.find(function(m) { return m.id === machineId; });
+  document.getElementById("modalBox").innerHTML = '<h2>⚙️ Editar Manutenção - ' + esc(machine ? machine.nome : '') + '</h2><div class="maintenance-form"><div><label>Horas da última manutenção</label><input id="editLastHours" type="number" step="0.5" min="0" value="' + record.lastMaintenanceHours + '"></div><div><label>Intervalo para próxima manutenção (horas)</label><input id="editInterval" type="number" step="0.5" min="1" value="' + record.maintenanceHours + '"></div><div class="full"><label>Observações</label><textarea id="editNotes">' + esc(record.notes || '') + '</textarea></div></div><div class="actions"><button class="primary" onclick="updateMaintenance(\'' + machineId + '\')">💾 Atualizar</button><button class="danger" onclick="deleteMaintenance(\'' + machineId + '\')">🗑 Remover Configuração</button><button class="secondary" onclick="closeModal()">Cancelar</button></div>';
+  openModal();
+}
+
+async function updateMaintenance(machineId) {
+  var lastHours = parseFloat(document.getElementById("editLastHours").value);
+  var interval = parseFloat(document.getElementById("editInterval").value);
+  var notes = document.getElementById("editNotes").value.trim();
+  
+  if (isNaN(lastHours) || lastHours < 0) return toast("Informe as horas da última manutenção.", "warning");
+  if (isNaN(interval) || interval < 1) return toast("Informe um intervalo válido.", "warning");
+  
+  var record = LOCAL.maintenanceRecords.find(function(r) { return r.machineId === machineId; });
+  if (record) {
+    record.lastMaintenanceHours = lastHours;
+    record.maintenanceHours = interval;
+    record.notes = notes;
+    record.updatedAt = new Date().toISOString();
+    saveLocal();
+    if (supabaseClient && navigator.onLine) await pushToCloud();
+  }
+  
+  closeModal();
+  toast("✅ Configuração atualizada!", "success");
+  refreshAll();
+}
+
+async function deleteMaintenance(machineId) {
+  if (!confirm("Remover a configuração de manutenção desta máquina?")) return;
+  LOCAL.maintenanceRecords = LOCAL.maintenanceRecords.filter(function(r) { return r.machineId !== machineId; });
+  saveLocal();
+  if (supabaseClient && navigator.onLine) await pushToCloud();
+  closeModal();
+  toast("Configuração removida.", "info");
+  refreshAll();
+}
+
+function logHoursModal(machineId) {
+  var machine = machines.find(function(m) { return m.id === machineId; });
+  if (!machine) return toast("Máquina não encontrada.", "warning");
+  
+  var lastLog = getLastMaintenanceLog(machineId);
+  var currentHours = lastLog ? lastLog.currentHours : 0;
+  
+  document.getElementById("modalBox").innerHTML = '<h2>📝 Registrar Horas - ' + esc(machine.codigo) + ' — ' + esc(machine.nome) + '</h2><p class="muted">Registre as horas atuais do hodômetro da máquina.</p><div class="maintenance-form"><div class="full"><label>Horas atuais da máquina</label><input id="logCurrentHours" type="number" step="0.5" min="' + currentHours + '" placeholder="Ex: 1200" value="' + (currentHours > 0 ? currentHours : '') + '"><span class="muted" style="font-size:11px;">Último registro: ' + currentHours + 'h</span></div><div class="full"><label>Observação (opcional)</label><input id="logNotes" placeholder="Ex: Troca de óleo realizada..."></div></div><div class="actions"><button class="primary" onclick="saveLogHours(\'' + machineId + '\')">💾 Registrar</button><button class="secondary" onclick="closeModal()">Cancelar</button></div>';
+  openModal();
+}
+
+async function saveLogHours(machineId) {
+  var hours = parseFloat(document.getElementById("logCurrentHours").value);
+  var notes = document.getElementById("logNotes").value.trim();
+  
+  if (isNaN(hours) || hours < 0) return toast("Informe as horas atuais.", "warning");
+  
+  var lastLog = getLastMaintenanceLog(machineId);
+  if (lastLog && hours < lastLog.currentHours) {
+    if (!confirm("As horas registradas (" + hours + "h) são menores que o último registro (" + lastLog.currentHours + "h). Confirmar mesmo assim?")) return;
+  }
+  
+  LOCAL.maintenanceLogs.push({
+    id: "log-" + crypto.randomUUID(),
+    machineId: machineId,
+    currentHours: hours,
+    operatorId: profile.id,
+    operatorName: profile.nome || profile.usuario,
+    date: new Date().toISOString(),
+    notes: notes
+  });
+  
+  saveLocal();
+  if (supabaseClient && navigator.onLine) {
+    var pushed = await pushToCloud();
+    if (!pushed) {
+      toast("Horas salvas localmente, mas não foram enviadas ao servidor.", "warning");
+    } else {
+      toast("✅ Horas registradas e compartilhadas com sucesso!", "success");
+    }
+  } else {
+    toast("✅ Horas registradas localmente!", "success");
+  }
+  closeModal();
+  
+  var record = maintenanceRecords.find(function(r) { return r.machineId === machineId; });
+  if (record) {
+    var hoursSince = hours - record.lastMaintenanceHours;
+    if (hoursSince >= record.maintenanceHours) {
+      toast("⚠ ATENÇÃO: Esta máquina atingiu o intervalo de manutenção!", "warning");
+    } else if (hoursSince >= record.maintenanceHours * 0.9) {
+      toast("⚠ Alerta: Esta máquina está próxima da manutenção!", "warning");
+    }
+  }
+  
+  refreshAll();
+}
+
+// ============================================================
+// CHECKLIST - CORRIGIDO
+// O problema principal era que o rebuildCheck() recriava todo
+// o HTML a cada chamada, perdendo os dados preenchidos.
+// A correção: salvar automaticamente ao preencher e recarregar
+// os dados do rascunho ao reconstruir.
+// ============================================================
+
+// Variável para controlar se estamos atualizando o formulário
+let isRebuilding = false;
+
+function getDraftKey(machineId, weekStart) {
+  return String(weekStart) + "_" + String(machineId) + "_" + String(profile.id);
+}
+
+function getCurrentDraft(machineId, weekStart) {
+  return (LOCAL.drafts || []).find(function(x){ return x.key === getDraftKey(machineId, weekStart); }) || null;
+}
+
+function renderCheck() {
+  var el = document.getElementById("checkForm");
+  if (!el || !profile) return;
+  if (!machines.length) {
+    el.innerHTML = "<div class='empty'>Nenhuma máquina disponível. Um administrador precisa cadastrar uma máquina.</div>";
+    return;
+  }
+
+  var week = getWeekDays()[0].iso;
+  var oldSelect = document.getElementById("machineSelect");
+  var machineId = oldSelect ? oldSelect.value : (machines[0] ? machines[0].id : null);
+  var draft = getCurrentDraft(machineId, week);
+  var requireAll = !!LOCAL.system.requireAll;
+  var validationNote = requireAll
+    ? '<div class="notice" style="background:#fef3c7;border-color:#fcd34d;"><strong>⚠ Validação ativa:</strong> Todos os itens de todos os dias precisam ser preenchidos para enviar.</div>'
+    : '<div class="allow-empty-note"><i>✅ Salvamento automático:</i> cada alteração fica gravada no rascunho da semana. O rascunho só é apagado pelo botão <b>Excluir rascunho</b>.</div>';
+
+  el.innerHTML = '<div class="formgrid three">' +
+    '<div><label>Semana</label><input value="' + esc(week) + ' a ' + esc(sunday()) + '" readonly></div>' +
+    '<div><label>Operador</label><input value="' + esc(profile.nome || profile.usuario) + '" readonly></div>' +
+    '<div><label>Máquina</label><select id="machineSelect" onchange="onMachineChange()">' +
+      machines.map(function(m){ return '<option value="' + esc(m.id) + '" ' + (m.id === machineId ? 'selected' : '') + '>' + esc(m.codigo) + ' — ' + esc(m.nome) + '</option>'; }).join('') +
+    '</select></div></div>' + validationNote + '<div id="itemsArea"></div>' +
+    '<div class="actions">' +
+      '<button class="secondary" onclick="saveDraft()">💾 Salvar rascunho</button>' +
+      '<button class="danger" onclick="resetDraft()">🗑 Excluir rascunho</button>' +
+      '<button class="primary" onclick="sendChecklist()">☁ Enviar checklist</button>' +
+    '</div>';
+
+  rebuildCheck();
+}
+
+function getWeekDays() {
+  var base = new Date();
+  var day = base.getDay();
+  var mondayDate = new Date(base.getFullYear(), base.getMonth(), base.getDate());
+  var diff = day === 0 ? -6 : 1 - day;
+  mondayDate.setDate(mondayDate.getDate() + diff);
+  mondayDate.setHours(0,0,0,0);
+  var result = [];
+  for (var i=0;i<7;i++) {
+    var d = new Date(mondayDate);
+    d.setDate(mondayDate.getDate()+i);
+    result.push({
+      iso: d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"),
+      label: d.toLocaleDateString("pt-BR", {weekday:"long", day:"2-digit", month:"2-digit"}),
+      short: d.toLocaleDateString("pt-BR", {weekday:"short", day:"2-digit", month:"2-digit"})
+    });
+  }
+  return result;
+}
+
+function rebuildCheck() {
+  if (isRebuilding) return;
+  isRebuilding = true;
+  try {
+    var sel = document.getElementById("machineSelect");
+    var area = document.getElementById("itemsArea");
+    if (!sel || !area) return;
+
+    var days = getWeekDays();
+    var draft = getCurrentDraft(sel.value, days[0].iso);
+    var answers = draft && draft.answers ? draft.answers : {};
+    var rows = '';
+
+    if (!items.length) {
+      area.innerHTML = "<div class='empty'>Nenhum item de checklist cadastrado.</div>";
+      return;
+    }
+
+    items.forEach(function(it){
+      var cells = '';
+      days.forEach(function(d){
+        var a = (answers[d.iso] && answers[d.iso][it.id]) ? answers[d.iso][it.id] : {};
+        var status = a.status || "";
+        var obs = a.obs || "";
+        cells += '<td class="week-cell">' +
+          '<select class="week-status" data-day="' + esc(d.iso) + '" data-item="' + esc(it.id) + '" onchange="onStatusChange()">' +
+          '<option value="">- (Não avaliado)</option>' +
+          '<option value="OK" ' + (status === "OK" ? "selected" : "") + '>✅ OK</option>' +
+          '<option value="NOK" ' + (status === "NOK" ? "selected" : "") + '>❌ NÃO CONFORME</option>' +
+          '<option value="NA" ' + (status === "NA" ? "selected" : "") + '>➖ N/A</option>' +
+          '</select>' +
+          '<input class="week-obs" data-day="' + esc(d.iso) + '" data-item="' + esc(it.id) + '" value="' + esc(obs) + '" placeholder="Obs." oninput="onObsChange()">' +
+          '</td>';
+      });
+      rows += '<tr><th class="item-name">' + esc(it.ordem) + '. ' + esc(it.descricao) + '</th>' + cells + '</tr>';
+    });
+
+    var generalObs = draft ? (draft.generalObservation || "") : "";
+    area.innerHTML = '<div class="weekly-checklist-wrap">' +
+      '<div class="weekly-title"><div><b>CHECKLIST SEMANAL</b></div><div class="muted">De segunda a domingo • ' + esc(days[0].label) + ' a ' + esc(days[6].label) + '</div></div>' +
+      '<div class="table-scroll"><table class="weekly-checklist"><thead><tr><th>ITEM DE INSPEÇÃO</th>' + days.map(function(d){return '<th>'+esc(d.short)+'</th>';}).join('') + '</tr></thead><tbody>' + rows + '</tbody></table></div>' +
+      '<div class="check weekly-general-observation"><b>Observações gerais da semana</b><textarea id="generalObservation" placeholder="Registre aqui ocorrências ou informações gerais da semana..." oninput="onGeneralObsChange()">' + esc(generalObs) + '</textarea></div>' +
+      '<div class="notice" style="margin-top:12px"><b>🔒 Regra de gravação:</b> as respostas ficam associadas à semana, operador e máquina. Trocar de tela ou fechar o navegador não apaga o rascunho.</div>' +
+      '</div>';
+  } finally { isRebuilding = false; }
+}
+
+function collectAnswers() {
+  var result = {};
+  getWeekDays().forEach(function(d){
+    result[d.iso] = {};
+    document.querySelectorAll('.week-status[data-day="' + d.iso + '"]').forEach(function(el){
+      var itemId = el.dataset.item;
+      var obsEl = document.querySelector('.week-obs[data-day="' + d.iso + '"][data-item="' + itemId + '"]');
+      result[d.iso][itemId] = { status: el.value || "", obs: obsEl ? obsEl.value : "" };
+    });
+  });
+  return result;
+}
+
+function collectGeneralObservation() {
+  var el = document.getElementById("generalObservation");
+  return el ? el.value : "";
+}
+
+function autoSaveDraft() {
+  if (isRebuilding || !profile) return false;
+  var sel = document.getElementById("machineSelect");
+  if (!sel || !sel.value) return false;
+
+  var weekStart = getWeekDays()[0].iso;
+  var key = getDraftKey(sel.value, weekStart);
+  var draft = {
+    id: "draft-" + key,
+    key: key,
+    operatorId: profile.id,
+    operatorName: profile.nome || profile.usuario,
+    machineId: sel.value,
+    week: weekStart,
+    weekEnd: sunday(),
+    data_checklist: new Date().toISOString().slice(0,10),
+    answers: collectAnswers(),
+    generalObservation: collectGeneralObservation(),
+    savedAt: new Date().toISOString()
+  };
+
+  LOCAL.drafts = (LOCAL.drafts || []).filter(function(x){ return x.key !== key; });
+  LOCAL.drafts.push(draft);
+  saveLocal();
+  return true;
+}
+
+function saveDraft() {
+  if (autoSaveDraft()) toast("✅ Rascunho salvo com sucesso!", "success");
+  else toast("⚠ Não foi possível salvar o rascunho.", "warning");
+}
+
+function onMachineChange() {
+  // O rascunho anterior já foi salvo em cada alteração. Apenas carregamos o novo.
+  renderCheck();
+}
+function onStatusChange() { autoSaveDraft(); }
+function onObsChange() { autoSaveDraft(); }
+function onGeneralObsChange() { autoSaveDraft(); }
+
+function resetDraft() {
+  if (!profile) return;
+  var sel = document.getElementById("machineSelect");
+  if (!sel || !sel.value) return toast("Selecione uma máquina.", "warning");
+  var weekStart = getWeekDays()[0].iso;
+  var key = getDraftKey(sel.value, weekStart);
+  var draft = getCurrentDraft(sel.value, weekStart);
+  if (!draft) return toast("Não existe rascunho para esta máquina nesta semana.", "info");
+  if (!confirm("🗑 Excluir permanentemente o rascunho desta máquina para esta semana? Todas as respostas ainda não enviadas serão apagadas deste rascunho.")) return;
+  LOCAL.drafts = (LOCAL.drafts || []).filter(function(x){ return x.key !== key; });
+  LOCAL.deletedDraftKeys = Array.from(new Set((LOCAL.deletedDraftKeys || []).concat([key])));
+  saveLocal();
+  renderCheck();
+  toast("🗑 Rascunho excluído. As respostas desta semana foram removidas do rascunho.", "success");
+}
+
+async function sendChecklist() {
+  var sel = document.getElementById("machineSelect");
+  if (!sel || !sel.value) return toast("Selecione uma máquina.", "warning");
+
+  autoSaveDraft();
+  var days = getWeekDays();
+  var answers = collectAnswers();
+  var generalObs = collectGeneralObservation();
+  var answeredCount = 0;
+  var missing = [];
+
+  days.forEach(function(day){
+    items.forEach(function(it){
+      var status = answers[day.iso] && answers[day.iso][it.id] ? answers[day.iso][it.id].status : "";
+      if (status && status !== "NA") answeredCount++;
+      if (LOCAL.system.requireAll && (!status || status === "")) missing.push(day.label + " — " + it.descricao);
+    });
+  });
+
+  if (answeredCount === 0) return toast("⚠ Nenhuma resposta foi registrada. Preencha pelo menos um item antes de enviar.", "warning");
+  if (LOCAL.system.requireAll && missing.length) {
+    toast("⚠ Complete todos os itens. Faltam " + missing.length + " resposta(s).", "warning");
+    return;
+  }
+
+  var m = machines.find(function(x){ return x.id === sel.value; });
+  var checklist = {
+    id: "check-" + Date.now() + "-" + Math.random().toString(36).slice(2,8),
+    operador_id: profile.id,
+    operador_nome: profile.nome || profile.usuario,
+    maquina_id: sel.value,
+    maquina_codigo: m ? m.codigo : "",
+    maquina_nome: m ? m.nome : "",
+    semana_inicio: days[0].iso,
+    semana_fim: days[6].iso,
+    data_checklist: new Date().toISOString().slice(0,10),
+    enviado_em: new Date().toISOString(),
+    status: "enviado",
+    answers: answers,
+    itens: answers,
+    generalObservation: generalObs,
+    observacoes_gerais: generalObs,
+    total_itens: items.length * days.length,
+    itens_respondidos: answeredCount
+  };
+
+  received = Array.isArray(received) ? received : [];
+  received = [checklist].concat(received.filter(function(x){ return x.id !== checklist.id; }));
+  localStorage.setItem(LOCAL_KEY + "_received", JSON.stringify(received));
+  LOCAL.deletedChecklistIds = (LOCAL.deletedChecklistIds || []).filter(function(id){ return id !== checklist.id; });
+  saveLocal();
+
+  if (supabaseClient && navigator.onLine) {
+    var ok = await pushToCloud();
+    if (!ok) toast("⚠ Checklist salvo neste aparelho. Não foi possível sincronizar agora.", "warning");
+    else toast("✅ Checklist enviado e compartilhado com sucesso! O rascunho continua salvo.", "success");
+  } else {
+    toast("✅ Checklist salvo localmente. O rascunho continua salvo.", "success");
+  }
+  await refreshAll();
+  renderCheck();
+}
+
+// ============================================================
+// FUNÇÃO DE VISUALIZAÇÃO
+// ============================================================
+async function openReceived(id) {
+  var c = received.find(function(x) { return x.id === id; });
+  if (!c) {
+    toast("Checklist não encontrado.", "error");
+    return;
+  }
+  
+  console.log("📋 Abrindo checklist:", JSON.stringify(c, null, 2));
+  
+  var m = machines.find(function(x) { return x.id === c.maquina_id; });
+  var u = users.find(function(x) { return x.id === c.operador_id; });
+  var answers = c.answers || {};
+  
+  var html = '<h2>📋 Checklist — ' + esc(m ? m.nome : c.maquina_nome || "") + '</h2>' +
+    '<p class="muted">Operador: ' + esc(u ? u.nome : c.operador_nome || "-") + 
+    ' • Data: ' + esc(c.semana_inicio) + ' a ' + esc(c.semana_fim) + 
+    ' • Enviado: ' + fmt(c.enviado_em) + 
+    ' • Itens respondidos: ' + (c.itens_respondidos || 0) + '/' + (c.total_itens || items.length) + '</p>' +
+    '<div class="table-scroll"><table><tr><th>Item</th><th>Status</th><th>Observação</th></tr>';
+  
+  items.forEach(function(it) {
+    var x = {};
+    var status = "NA";
+    var obs = "";
+    
+    if (answers[it.id]) {
+      x = answers[it.id];
+      status = x.status || "NA";
+      obs = x.obs || x.observacao || "";
+    } else {
+      var days = getWeekDays();
+      for (var i = 0; i < days.length; i++) {
+        var day = days[i].iso;
+        if (answers[day] && answers[day][it.id]) {
+          x = answers[day][it.id];
+          status = x.status || "NA";
+          obs = x.obs || x.observacao || "";
+          break;
+        }
+      }
+    }
+    
+    var badgeClass = "warn";
+    var emoji = "➖";
+    if (status === "OK") { 
+      badgeClass = "ok"; 
+      emoji = "✅"; 
+    } else if (status === "NOK") { 
+      badgeClass = "bad"; 
+      emoji = "❌"; 
+    } else if (status === "NA") { 
+      badgeClass = "warn"; 
+      emoji = "➖"; 
+    }
+    
+    html += '<tr>' +
+      '<td>' + it.ordem + '. ' + esc(it.descricao) + '</td>' +
+      '<td><span class="badge ' + badgeClass + '">' + emoji + ' ' + esc(status) + '</span></td>' +
+      '<td>' + esc(obs) + '</td>' +
+    '</tr>';
+  });
+  
+  html += '</table></div>';
+  
+  var generalObs = c.observacoes_gerais || c.generalObservation || "Nenhuma observação geral registrada.";
+  html += '<div class="notice"><b>📝 Observações gerais:</b><br>' + esc(generalObs) + '</div>';
+  
+  html += '<div class="muted" style="margin-top:10px;font-size:12px;">' +
+    'Enviado em: ' + fmt(c.enviado_em || c.data_envio) + 
+    ' • ID: ' + esc(c.id) +
+  '</div>';
+  
+  html += '<div class="actions no-print">' +
+    '<button class="primary" onclick="window.print()">🖨 Imprimir / PDF</button>' +
+    '<button class="secondary" onclick="closeModal()">Fechar</button>' +
+  '</div>';
+  
+  document.getElementById("modalBox").innerHTML = html;
+  openModal();
+}
+
+// ============================================================
+// FUNÇÃO DE EXCLUSÃO PERMANENTE DE CHECKLIST
+// ============================================================
+async function deleteReceived(id) {
+  if (!profile || profile.perfil !== "admin") return toast("Apenas o administrador pode excluir checklists.", "warning");
+  if (!confirm("🗑 EXCLUIR PERMANENTEMENTE este checklist? Ele será removido dos dispositivos sincronizados e não voltará após atualizar.")) return;
+
+  var exists = received.some(function(c){ return c.id === id; });
+  if (!exists) return toast("Checklist não encontrado.", "warning");
+
+  LOCAL.deletedChecklistIds = Array.from(new Set((LOCAL.deletedChecklistIds || []).concat([id])));
+  received = received.filter(function(c){ return c.id !== id; });
+  localStorage.setItem(LOCAL_KEY + "_received", JSON.stringify(received));
+  saveLocal();
+
+  if (supabaseClient && navigator.onLine) {
+    var ok = await pushToCloud();
+    if (!ok) {
+      toast("⚠ Excluído localmente, mas a sincronização falhou. Tente 'Sincronizar agora' antes de fechar.", "warning");
+    } else {
+      toast("✅ Checklist excluído permanentemente do sistema sincronizado.", "success");
+    }
+  } else {
+    toast("✅ Checklist excluído permanentemente deste aparelho. Ao reconectar, sincronize para propagar a exclusão.", "success");
+  }
+  await refreshAll();
+}
+
+// ============================================================
+// FUNÇÃO DE EXCLUSÃO DE USUÁRIO
+// ============================================================
+async function deleteUser(id) {
+  if (!confirm("🗑 EXCLUIR PERMANENTEMENTE este usuário? Esta ação não pode ser desfeita.")) return;
+  
+  var user = LOCAL.localUsers.find(function(x) { return x.id === id; });
+  if (!user) {
+    toast("Usuário não encontrado.", "warning");
+    return;
+  }
+  
+  if (user.usuario === "admin") {
+    toast("⚠ O usuário administrador não pode ser excluído.", "warning");
+    return;
+  }
+  
+  LOCAL.localUsers = LOCAL.localUsers.filter(function(x) { return x.id !== id; });
+  saveLocal();
+  
+  if (supabaseClient && navigator.onLine) {
+    var pushed = await pushToCloud();
+    if (!pushed) {
+      toast("⚠ Usuário excluído localmente, mas não foi removido do servidor.", "warning");
+    } else {
+      toast("✅ Usuário excluído permanentemente de todos os dispositivos!", "success");
+    }
+  } else {
+    toast("✅ Usuário excluído permanentemente!", "success");
+  }
+  
+  await refreshAll();
+}
+
+// ============================================================
+// FUNÇÕES DE ADMIN
+// ============================================================
+function machineModal() {
+  if (!profile || profile.perfil !== "admin") {
+    toast("Apenas administradores podem cadastrar máquinas.", "warning");
+    return;
+  }
+  document.getElementById("modalBox").innerHTML = '<h2>Nova máquina</h2><p class="muted">As máquinas cadastradas serão compartilhadas com todos os usuários.</p><div class="formgrid"><div><label>Código</label><input id="mc" placeholder="Ex: EMP-001"></div><div><label>Nome</label><input id="mn" placeholder="Ex: Empilhadeira 01"></div></div><label>Tipo</label><select id="mt"><option>Empilhadeira</option><option>Trator</option><option>Pá Carregadeira</option><option>Outro</option></select><div class="actions"><button class="primary" onclick="addMachine()">Salvar</button><button class="secondary" onclick="closeModal()">Cancelar</button></div>';
+  openModal();
+}
+
+async function addMachine() {
+  var codigo = document.getElementById("mc").value.trim();
+  var nome = document.getElementById("mn").value.trim();
+  var tipo = document.getElementById("mt").value;
+  
+  if (!codigo || !nome) return toast("Preencha código e nome.", "warning");
+  if (machines.some(function(m) { return m.codigo === codigo; })) return toast("Código já cadastrado.", "warning");
+  
+  LOCAL.demoMachines.push({
+    id: "demo-" + crypto.randomUUID(),
+    codigo: codigo,
+    nome: nome,
+    tipo: tipo,
+    ativo: true
+  });
+  saveLocal();
+  if (supabaseClient && navigator.onLine) await pushToCloud();
+  closeModal();
+  await refreshAll();
+  toast("✅ Máquina cadastrada e compartilhada com todos os usuários.", "success");
+}
+
+async function deleteMachine(id) {
+  if (!confirm("🗑 EXCLUIR PERMANENTEMENTE esta máquina?")) return;
+  LOCAL.demoMachines = LOCAL.demoMachines.filter(function(x) { return x.id !== id; });
+  LOCAL.maintenanceRecords = LOCAL.maintenanceRecords.filter(function(r) { return r.machineId !== id; });
+  LOCAL.maintenanceLogs = LOCAL.maintenanceLogs.filter(function(l) { return l.machineId !== id; });
+  saveLocal();
+  if (supabaseClient && navigator.onLine) await pushToCloud();
+  await refreshAll();
+  toast("🗑 Máquina excluída permanentemente!", "success");
+}
+
+function userModal() {
+  if (!profile || profile.perfil !== "admin") {
+    toast("Apenas administradores podem gerenciar usuários.", "warning");
+    return;
+  }
+  document.getElementById("modalBox").innerHTML = '<h2>Novo usuário</h2><p class="muted">Crie perfis para outros usuários do sistema.</p><label>Nome de usuário</label><input id="uu" placeholder="Ex: operador01"><label>Nome exibido</label><input id="un" placeholder="Ex: João Silva"><label>Perfil</label><select id="ur"><option value="operador">Operador</option><option value="supervisor">Supervisor</option><option value="admin">Administrador</option></select><div class="actions"><button class="primary" onclick="addProfile()">Salvar perfil</button><button class="secondary" onclick="closeModal()">Cancelar</button></div>';
+  openModal();
+}
+
+async function addProfile() {
+  var u = document.getElementById("uu").value.trim().toLowerCase();
+  var n = document.getElementById("un").value.trim();
+  var r = document.getElementById("ur").value;
+  
+  if (!u || !n) return toast("Preencha usuário e nome.", "warning");
+  if (LOCAL.localUsers.some(function(x) { return x.usuario === u; })) return toast("Usuário já existe.", "warning");
+  
+  var defaultPassword = "123456";
+  LOCAL.localUsers.push({
+    id: "local-" + crypto.randomUUID(),
+    usuario: u,
+    nome: n,
+    perfil: r,
+    ativo: true,
+    passwordHash: await sha256(defaultPassword)
+  });
+  saveLocal();
+  if (supabaseClient && navigator.onLine) await pushToCloud();
+  closeModal();
+  await refreshAll();
+  toast("✅ Perfil criado e compartilhado. Senha padrão: " + defaultPassword, "success");
+}
+
+async function toggleUser(id, active) {
+  var u = LOCAL.localUsers.find(function(x) { return x.id === id; });
+  if (u) u.ativo = active;
+  saveLocal();
+  if (supabaseClient && navigator.onLine) await pushToCloud();
+  await refreshAll();
+}
+
+async function exportCSV() {
+  var rows = [["Data", "Semana", "Operador", "Máquina", "Item", "Status", "Observação", "Observações gerais"]];
+  for (var ci = 0; ci < received.length; ci++) {
+    var c = received[ci];
+    var a = c.answers || {};
+    var m = machines.find(function(x) { return x.id === c.maquina_id; });
+    var u = users.find(function(x) { return x.id === c.operador_id; });
+    items.forEach(function(it) {
+      var x = {};
+      if (a[it.id]) {
+        x = a[it.id];
+      } else {
+        var days = getWeekDays();
+        for (var i = 0; i < days.length; i++) {
+          var day = days[i].iso;
+          if (a[day] && a[day][it.id]) {
+            x = a[day][it.id];
+            break;
+          }
+        }
+      }
+      rows.push([
+        c.data_checklist || fmt(c.enviado_em),
+        c.semana_inicio || "",
+        u ? u.nome : c.operador_nome || "",
+        m ? m.nome : c.maquina_nome || "",
+        it.descricao,
+        x.status || "NA",
+        x.obs || x.observacao || "",
+        c.observacoes_gerais || c.generalObservation || ""
+      ]);
+    });
+  }
+  var csv = rows.map(function(r) { return r.map(function(v) { return '"' + String(v || "").replaceAll('"', '""') + '"'; }).join(";"); }).join("\n");
+  var a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
+  a.download = "checkfleet_checklists.csv";
+  a.click();
+}
+
+function backupLocal() {
+  var a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(LOCAL, null, 2)], { type: "application/json" }));
+  a.download = "checkfleet_backup.json";
+  a.click();
+}
+
+function restoreLocal() {
+  var i = document.createElement("input");
+  i.type = "file";
+  i.accept = ".json";
+  i.onchange = async function() {
+    var f = i.files[0];
+    if (!f) return;
+    try {
+      var d = JSON.parse(await f.text());
+      localStorage.setItem(LOCAL_KEY, JSON.stringify(d));
+      LOCAL = loadLocal();
+      await refreshAll();
+      toast("Backup restaurado.", "success");
+    } catch (e) {
+      toast("Backup inválido.", "error");
+    }
+  };
+  i.click();
+}
+
+function clearLocal() {
+  if (!confirm("Apagar somente os dados locais deste aparelho?")) return;
+  localStorage.removeItem(LOCAL_KEY);
+  location.reload();
+}
+
+function settingsTab(id) {
+  document.querySelectorAll(".setting-pane").forEach(function(x) { x.classList.remove("active"); });
+  document.querySelectorAll(".setting-menu button").forEach(function(x) { x.classList.remove("active"); });
+  
+  var pane = document.getElementById("pane-" + id);
+  var btn = document.getElementById("setBtn" + id.charAt(0).toUpperCase() + id.slice(1));
+  if (pane) pane.classList.add("active");
+  if (btn) btn.classList.add("active");
+  
+  if (id === "company") loadCompany();
+  if (id === "account") loadAccount();
+  if (id === "system") loadSystem();
+}
+
+function loadCompany() {
+  document.getElementById("cfgCompany").value = LOCAL.company.name || "";
+  document.getElementById("cfgUnit").value = LOCAL.company.unit || "";
+  document.getElementById("cfgCnpj").value = LOCAL.company.cnpj || "";
+  document.getElementById("cfgPhone").value = LOCAL.company.phone || "";
+  document.getElementById("cfgObs").value = LOCAL.company.obs || "";
+}
+
+async function saveCompany() {
+  LOCAL.company.name = document.getElementById("cfgCompany").value.trim();
+  LOCAL.company.unit = document.getElementById("cfgUnit").value.trim();
+  LOCAL.company.cnpj = document.getElementById("cfgCnpj").value.trim();
+  LOCAL.company.phone = document.getElementById("cfgPhone").value.trim();
+  LOCAL.company.obs = document.getElementById("cfgObs").value.trim();
+  saveLocal();
+  if (supabaseClient && navigator.onLine) await pushToCloud();
+  toast("✅ Configurações da empresa salvas e compartilhadas.", "success");
+}
+
+function loadAccount() {
+  document.getElementById("accUser").value = profile ? profile.usuario : "";
+  document.getElementById("accRole").value = profile ? profile.perfil : "";
+}
+
+function loadSystem() {
+  document.getElementById("cfgAutoSync").checked = LOCAL.system.autoSync;
+  document.getElementById("cfgRequireAll").checked = LOCAL.system.requireAll;
+  document.getElementById("cfgMaxItems").value = LOCAL.system.maxItems;
+}
+
+async function saveSystem() {
+  LOCAL.system.autoSync = document.getElementById("cfgAutoSync").checked;
+  LOCAL.system.requireAll = document.getElementById("cfgRequireAll").checked;
+  LOCAL.system.maxItems = Math.max(1, Math.min(500, Number(document.getElementById("cfgMaxItems").value) || 500));
+  saveLocal();
+  if (supabaseClient && navigator.onLine) await pushToCloud();
+  toast("✅ Configurações do sistema salvas e compartilhadas.", "success");
+  renderCheck();
+}
+
+async function changeMyPassword() {
+  var a = document.getElementById("newPass").value;
+  var b = document.getElementById("newPass2").value;
+  if (a.length < 6) return toast("A senha deve ter pelo menos 6 caracteres.", "warning");
+  if (a !== b) return toast("As senhas não conferem.", "warning");
+  
+  var u = LOCAL.localUsers.find(function(x) { return x.id === profile.id; });
+  if (u) {
+    u.passwordHash = await sha256(a);
+    saveLocal();
+    if (supabaseClient && navigator.onLine) await pushToCloud();
+    profile = u;
+    toast("✅ Senha alterada com sucesso!", "success");
+  }
+}
+
+async function syncQueue() {
+  var el = document.getElementById("syncInfo");
+  if (!supabaseClient) {
+    if (el) el.textContent = "Modo local - configure o Supabase para compartilhar entre dispositivos.";
+    return toast("Modo local: dados salvos somente neste aparelho.", "info");
+  }
+  
+  if (!navigator.onLine) {
+    if (el) el.textContent = "📡 Offline - conecte-se à internet para sincronizar.";
+    return toast("📡 Você está offline. Conecte-se à internet para sincronizar.", "warning");
+  }
+  
+  await syncFull();
+  await refreshAll();
+}
+
+function updateNet() {
+  var el = document.getElementById("net");
+  if (el) {
+    var status = supabaseClient && navigator.onLine ? "🟢 Online • Supabase" : "🟡 Offline • somente este aparelho";
+    el.textContent = status;
+  }
+}
+
+// ============================================================
+// EVENTOS DE REDE
+// ============================================================
+window.addEventListener("online", function() {
+  updateNet();
+  CLOUD_SYNC_READY = true;
+  if (supabaseClient && profile) {
+    toast("📡 Internet reconectada. Sincronizando...", "info");
+    syncFull().then(function() {
+      refreshAll();
+    });
+  }
+});
+
+window.addEventListener("offline", function() {
+  updateNet();
+  toast("📡 Internet desconectada. Trabalhando em modo offline.", "warning");
+});
+
+// ============================================================
+// INICIALIZAÇÃO
+// ============================================================
+window.addEventListener("load", function() {
+  console.log("🚀 CHECKFLEET iniciando...");
+  
+  LOCAL = loadLocal();
+  
+  if (!supabaseClient && typeof window.supabase !== 'undefined' && window.supabase.createClient) {
+    try {
+      supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+      console.log("✅ Supabase client criado após load");
+    } catch (e) {
+      console.warn("⚠️ Erro ao criar Supabase client:", e);
+    }
+  }
+  
+  connectionText();
+  updateNet();
+  
+  if (supabaseClient && navigator.onLine) {
+    console.log("🔌 Tentando conectar ao Supabase...");
+    ensureTableExists().then(function(tableExists) {
+      if (tableExists) {
+        console.log("📥 Carregando dados do servidor...");
+        pullFromCloud().then(function(ok) {
+          CLOUD_SYNC_READY = ok;
+          var el = document.getElementById("syncInfo");
+          if (el) {
+            el.textContent = ok ? "☁ Servidor conectado — dados compartilhados carregados." : "⚠ Não foi possível carregar os dados do servidor.";
+          }
+          if (ok) {
+            console.log("📤 Publicando dados locais...");
+            pushToCloud();
+          }
+        });
+      } else {
+        console.log("⚠️ Tabela não encontrada.");
+        var el = document.getElementById("syncInfo");
+        if (el) {
+          el.textContent = "⚠ Tabela 'checkfleet_data' não encontrada. Crie-a no SQL Editor do Supabase.";
+        }
+      }
+    });
+  } else {
+    console.log("⚠️ Supabase não disponível. Modo offline ativado.");
+    var el = document.getElementById("syncInfo");
+    if (el) {
+      el.textContent = "📡 Modo offline. Dados salvos localmente.";
+    }
+  }
+  
+  setInterval(function() {
+    if (supabaseClient && navigator.onLine && profile && CLOUD_SYNC_READY) {
+      console.log("🔄 Sincronização periódica...");
+      pullFromCloud().then(function(ok) {
+        if (ok) {
+          users = LOCAL.localUsers;
+          machines = LOCAL.demoMachines.filter(function(x) { return x.ativo; });
+          items = LOCAL.demoItems.filter(function(x) { return x.ativo; });
+          received = JSON.parse(localStorage.getItem(LOCAL_KEY + "_received") || "[]");
+          render();
+        }
+      });
+    }
+  }, 30000);
+  
+  console.log("✅ CHECKFLEET inicializado com sucesso!");
+});
+</script>
+<script>if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").then(function(){console.log("CHECKFLEET PWA: Service Worker ativo");}).catch(function(e){console.warn("PWA Service Worker:",e);});});}</script>
+</body>
+</html>
